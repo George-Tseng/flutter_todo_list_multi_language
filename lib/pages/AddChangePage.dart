@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 //引入其他頁
 import 'package:flutter_todo_multi_lan/modules/localizations.dart';
 import 'package:flutter_todo_multi_lan/modules/tools.dart';
@@ -15,13 +16,20 @@ class _AddChangePage extends State<AddChangePage> {
   final TextEditingController _controller02 = TextEditingController();
   final TextEditingController _controller03 = TextEditingController();
 
+  //顯示給使用者看的時間格式
   String transTime;
+
+  //主鍵(產生規則暫定為日期格式yyyyMMddHHmm共12碼)
+  int id;
 
   bool btnSave = true;
 
   DateTime inputDate = DateTime.now();
+  DateTime nowTime;
 
   TimeOfDay inputTime;
+
+  DateFormat idFormat = DateFormat('yyyyMMddHHmm');
 
   Tool myTool = Tool();
 
@@ -61,7 +69,7 @@ class _AddChangePage extends State<AddChangePage> {
       child: Container(
         child: TextField(
           controller: controller,
-          maxLength: 50,
+          maxLength: 255, //可根據自己的定義調整
           decoration: InputDecoration(
             labelText: MyAppLocalizations.of(context).topic, //位於輸入框時時會自動縮小到左上角
             hintText: MyAppLocalizations.of(context).topicHint, //輸入提示
@@ -131,10 +139,10 @@ class _AddChangePage extends State<AddChangePage> {
 
   void _save() async {
     if(inputCheckAdd() == true) {
-      print('成功');
-    }
-    else {
-      print('失敗');
+      nowTime = DateTime.now();
+      id = int.parse('${idFormat.format(nowTime)}');
+      print('id = '+id.toString());
+      Tool.showMessage(context, MyAppLocalizations.of(context).successMessage01, MyAppLocalizations.of(context).success, MyAppLocalizations.of(context).yes);
     }
   }
 
@@ -151,11 +159,18 @@ class _AddChangePage extends State<AddChangePage> {
         _result = -3;
     }
 
-    if(_result == 0) 
-      return true;
     if(_result == -1) {
       Tool.showErrorMessage(context, MyAppLocalizations.of(context).errorMessage01, MyAppLocalizations.of(context).errorFound, MyAppLocalizations.of(context).yes);
       return false;
     }
+    if(_result == -2) {
+      Tool.showErrorMessage(context, MyAppLocalizations.of(context).errorMessage02, MyAppLocalizations.of(context).errorFound, MyAppLocalizations.of(context).yes);
+      return false;
+    }
+    if(_result == -3) {
+      Tool.showErrorMessage(context, MyAppLocalizations.of(context).errorMessage03, MyAppLocalizations.of(context).errorFound, MyAppLocalizations.of(context).yes);
+      return false;
+    }
+    return true;
   }
 }

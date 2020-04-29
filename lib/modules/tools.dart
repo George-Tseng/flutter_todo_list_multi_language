@@ -9,7 +9,7 @@ class Tool {
   String hour;
   String minute;
 
-  static void showMessage(BuildContext context, String message) {
+  static void showMessage(BuildContext context, String message, String success,String yes) {
     showDialog(
         context: context,
         barrierDismissible: false, //獨占性，只允許使用者按下對話框中的按鈕才能繼續操作
@@ -20,7 +20,7 @@ class Tool {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text('操作完成',
+                      Text(success,
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(width: 10),
                       Icon(Icons.check_circle_outline)
@@ -40,7 +40,7 @@ class Tool {
                     MaterialPageRoute(builder: (context) => MainPage()));
                 },
                 child:
-                    Text("確定", style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(yes, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           );
@@ -73,7 +73,8 @@ class Tool {
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  //Navigator.of(context).pop()這個寫法有遇到短暫黑屏過，所以還是用下面這個好
+                  Navigator.pop(context);
                 },
                 child:
                     Text(yes, style: TextStyle(fontWeight: FontWeight.bold)),

@@ -23,8 +23,12 @@ class MyAppLocalizations {
       'selectTime': 'Select Time',
       'save': 'Save',
       'errorFound': 'Error!',
-      'yes': 'confirm',
+      'yes': 'Confirm',
+      'success': 'Success!',
       'errorMessage01': 'The "Task" can not be empty!',
+      'errorMessage02': 'The "Date" can not be empty!',
+      'errorMessage03': 'The "Time" can not be empty!',
+      'successMessage01': 'The operation is successed!',
     },
     'zh'+'TW': {
       'title': '備忘錄',
@@ -37,7 +41,11 @@ class MyAppLocalizations {
       'save': '儲存',
       'errorFound': '發生錯誤!',
       'yes': '確認',
+      'success': '順利完成!',
       'errorMessage01': '「事項」不可為空白!',
+      'errorMessage02': '「日期」不可為空白!',
+      'errorMessage03': '「時間」不可為空白!',
+      'successMessage01': '操作順利完成!',
     },
     'zh'+'CN': {
       'title': '备忘录',
@@ -50,7 +58,11 @@ class MyAppLocalizations {
       'save': '储存',
       'errorFound': '发生错误!',
       'yes': '确认',
+      'success': '順利完成!',
       'errorMessage01': '「事项」不可为空白!',
+      'errorMessage02': '「日期」不可为空白!',
+      'errorMessage03': '「时间」不可为空白!',
+      'successMessage01': '操作順利完成!',
     },
     'zh'+'Hant': {
       'title': '備忘錄',
@@ -64,7 +76,11 @@ class MyAppLocalizations {
       'save': '儲存',
       'errorFound': '發生錯誤!',
       'yes': '確認',
+      'success': '順利完成!',
       'errorMessage01': '「事項」不可為空白!',
+      'errorMessage02': '「日期」不可為空白!',
+      'errorMessage03': '「時間」不可為空白!',
+      'successMessage01': '操作顺利完成!',
     },
     'zh'+'Hans': {
       'title': '备忘录',
@@ -77,7 +93,11 @@ class MyAppLocalizations {
       'save': '储存',
       'errorFound': '发生错误!',
       'yes': '确认',
+      'success': '順利完成!',
       'errorMessage01': '「事项」不可为空白!',
+      'errorMessage02': '「日期」不可为空白!',
+      'errorMessage03': '「时间」不可为空白!',
+      'successMessage01': '操作顺利完成!',
     },
   };
 
@@ -142,11 +162,35 @@ class MyAppLocalizations {
     else
       return _localizedValues[locale.languageCode+locale.scriptCode]['yes'];
   }
+  String get success {
+    if(locale.countryCode != null)
+      return _localizedValues[locale.languageCode+locale.countryCode]['success'];
+    else
+      return _localizedValues[locale.languageCode+locale.scriptCode]['success'];
+  }
   String get errorMessage01 {
     if(locale.countryCode != null)
       return _localizedValues[locale.languageCode+locale.countryCode]['errorMessage01'];
     else
       return _localizedValues[locale.languageCode+locale.scriptCode]['errorMessage01'];
+  }
+  String get errorMessage02 {
+    if(locale.countryCode != null)
+      return _localizedValues[locale.languageCode+locale.countryCode]['errorMessage02'];
+    else
+      return _localizedValues[locale.languageCode+locale.scriptCode]['errorMessage02'];
+  }
+  String get errorMessage03 {
+    if(locale.countryCode != null)
+      return _localizedValues[locale.languageCode+locale.countryCode]['errorMessage03'];
+    else
+      return _localizedValues[locale.languageCode+locale.scriptCode]['errorMessage03'];
+  }
+  String get successMessage01 {
+    if(locale.countryCode != null)
+      return _localizedValues[locale.languageCode+locale.countryCode]['successMessage01'];
+    else
+      return _localizedValues[locale.languageCode+locale.scriptCode]['successMessage01'];
   }
 }
 
