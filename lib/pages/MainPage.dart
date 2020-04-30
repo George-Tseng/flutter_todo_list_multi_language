@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 //引入其他頁
+import 'package:flutter_todo_multi_lan/dbDatas/dbDatas.dart';
+import 'package:flutter_todo_multi_lan/dbDatas/dbHelper.dart';
 import 'package:flutter_todo_multi_lan/modules/localizations.dart';
-import 'AddChangePage.dart';
+import 'package:flutter_todo_multi_lan/modules/tools.dart';
+import 'AddPage.dart';
+import 'ChangePage.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -54,11 +58,30 @@ class _MyHomePage extends State<MyHomePage> {
   final TextEditingController _controller002 = TextEditingController();
   final TextEditingController _controller003 = TextEditingController();
 
+  final key = GlobalKey<ScaffoldState>();
+
+  DBHelper helper = DBHelper();
+
+  Tool myTool = Tool();
+
+  List<DBDatas> fullData = List<DBDatas>();
+  List<DBDatas> finishedData = List<DBDatas>();
+  List<DBDatas> unfinishedData = List<DBDatas>();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      getData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        key: key,
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
@@ -73,13 +96,22 @@ class _MyHomePage extends State<MyHomePage> {
           automaticallyImplyLeading: true,
           actions: <Widget>[
             IconButton(
+                icon: Icon(Icons.autorenew),
+                color: Colors.white,
+                iconSize: 20.0,
+                onPressed: () {
+                  setState(() {
+                    getData();
+                  });
+                }),
+            IconButton(
                 icon: Icon(Icons.add),
                 color: Colors.white,
                 iconSize: 20.0,
                 onPressed: () {
                   //前往新增
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => AddChangePage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddPage()));
                 }),
           ],
         ),
@@ -91,7 +123,10 @@ class _MyHomePage extends State<MyHomePage> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    child: Container(),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: _buildList1(fullData),
+                    ),
                   ),
                   _buildSearchBar(_controller001),
                 ],
@@ -103,7 +138,10 @@ class _MyHomePage extends State<MyHomePage> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    child: Container(),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: _buildList2(unfinishedData),
+                    ),
                   ),
                   _buildSearchBar(_controller002),
                 ],
@@ -115,7 +153,10 @@ class _MyHomePage extends State<MyHomePage> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    child: Container(),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: _buildList3(finishedData),
+                    ),
                   ),
                   _buildSearchBar(_controller003),
                 ],
@@ -171,5 +212,206 @@ class _MyHomePage extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  Widget _buildList1(List<DBDatas> fullData) {
+    if (fullData.length == 0 || fullData == null)
+      return Container(
+          child:
+              Center(child: Text(MyAppLocalizations.of(context).contentEmpty)));
+    else
+      return ListView.builder(
+          itemCount: fullData.length ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: IconButton(
+                  icon: Icon(Icons.delete),
+                  color: Colors.blue,
+                  onPressed: () {
+                    //執行刪除
+                    Tool.showCheckMessage(
+                        context,
+                        MyAppLocalizations.of(context).warning,
+                        '「' +
+                            fullData[index].task +
+                            '」' +
+                            MyAppLocalizations.of(context).deleteMessage,
+                        MyAppLocalizations.of(context).yes,
+                        MyAppLocalizations.of(context).no, () async {
+                      int _result = await helper.deleteTask(fullData[index].id);
+                      //成功
+                      if (_result != 0)
+                        Tool.showSackerMessageBar(
+                            key,
+                            MyAppLocalizations.of(context).successMessage01,
+                            'Success');
+                      //失敗
+                      else
+                        Tool.showSackerMessageBar(
+                            key,
+                            MyAppLocalizations.of(context).errorMessage00,
+                            'Error');
+                    });
+                  }),
+              title: Text(fullData[index].task,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+              subtitle: Text(fullData[index].date +
+                  ' ' +
+                  myTool.timeTranstor(fullData[index].time)),
+              trailing: IconButton(
+                  icon: Icon(Icons.edit),
+                  color: Colors.blue,
+                  onPressed: () {
+                    //前往修改
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangePage(list: fullData[index])));
+                  }),
+            );
+          });
+  }
+
+  Widget _buildList2(List<DBDatas> unfinishedData) {
+    if (unfinishedData.length == 0 || fullData == null)
+      return Container();
+    else
+      return ListView.builder(
+          itemCount: unfinishedData.length ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: IconButton(
+                  icon: Icon(Icons.delete),
+                  color: Colors.blue,
+                  onPressed: () {
+                    //執行刪除
+                    Tool.showCheckMessage(
+                      context,
+                      MyAppLocalizations.of(context).warning,
+                      '「' +
+                          unfinishedData[index].task +
+                          '」' +
+                          MyAppLocalizations.of(context).deleteMessage,
+                      MyAppLocalizations.of(context).yes,
+                      MyAppLocalizations.of(context).no,
+                      () async {
+                        int _result =
+                            await helper.deleteTask(fullData[index].id);
+                        //成功
+                        if (_result != 0)
+                          Tool.showSackerMessageBar(
+                              key,
+                              MyAppLocalizations.of(context).successMessage01,
+                              'Success');
+                        //失敗
+                        else
+                          Tool.showSackerMessageBar(
+                              key,
+                              MyAppLocalizations.of(context).errorMessage00,
+                              'Error');
+                      },
+                    );
+                  }),
+              title: Text(unfinishedData[index].task,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+              subtitle: Text(unfinishedData[index].date +
+                  ' ' +
+                  myTool.timeTranstor(unfinishedData[index].time)),
+              trailing: IconButton(
+                  icon: Icon(Icons.edit),
+                  color: Colors.blue,
+                  onPressed: () {
+                    //前往修改
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangePage(list: unfinishedData[index])));
+                  }),
+            );
+          });
+  }
+
+  Widget _buildList3(List<DBDatas> finishedData) {
+    if (finishedData.length == 0 || fullData == null)
+      return Container();
+    else
+      return ListView.builder(
+          itemCount: finishedData.length ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: IconButton(
+                  icon: Icon(Icons.delete),
+                  color: Colors.blue,
+                  onPressed: () {
+                    //執行刪除
+                    Tool.showCheckMessage(
+                      context,
+                      MyAppLocalizations.of(context).warning,
+                      '「' +
+                          finishedData[index].task +
+                          '」' +
+                          MyAppLocalizations.of(context).deleteMessage,
+                      MyAppLocalizations.of(context).yes,
+                      MyAppLocalizations.of(context).no,
+                      () async {
+                        int _result =
+                            await helper.deleteTask(fullData[index].id);
+                        //成功
+                        if (_result != 0)
+                          Tool.showSackerMessageBar(
+                              key,
+                              MyAppLocalizations.of(context).successMessage01,
+                              'Success');
+                        //失敗
+                        else
+                          Tool.showSackerMessageBar(
+                              key,
+                              MyAppLocalizations.of(context).errorMessage00,
+                              'Error');
+                      },
+                    );
+                  }),
+              title: Text(finishedData[index].task,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+              subtitle: Text(finishedData[index].date +
+                  ' ' +
+                  myTool.timeTranstor(finishedData[index].time)),
+              trailing: IconButton(
+                  icon: Icon(Icons.edit),
+                  color: Colors.blue,
+                  onPressed: () {
+                    //前往修改
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangePage(list: finishedData[index])));
+                  }),
+            );
+          });
+  }
+
+  void getData() async {
+    fullData = await helper.getTaskList();
+    //如果有資料就不會為空
+    if (fullData != null) {
+      Tool.showSackerMessageBar(
+          key, MyAppLocalizations.of(context).loadSuccess, 'Success');
+    }
+    finishedData = await helper.getFinishedTaskList();
+    //如果有資料就不會為空
+    unfinishedData = await helper.getUnfinishedTaskList();
+    //如果有資料就不會為空
   }
 }
