@@ -5,6 +5,7 @@ import 'package:flutter_todo_multi_lan/pages/MainPage.dart';
 
 class Tool {
   DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+  DateFormat timeFormat = DateFormat('HH:mm');
   String hour;
   String minute;
 
@@ -145,6 +146,14 @@ class Tool {
           : Duration(seconds: 1, milliseconds: 500),
     );
     key.currentState.showSnackBar(snackBar);
+  }
+
+  bool timeDifference(DateTime nowTime, String date, String time) {
+    nowTime = DateTime.now();
+    if(nowTime.isAfter(DateTime.parse(date + ' ' + time)) == true)
+      return true;
+    else
+      return false;
   }
 
   String timeTranstor(String keyTime) {

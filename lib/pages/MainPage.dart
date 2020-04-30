@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 //引入其他頁
@@ -67,6 +68,10 @@ class _MyHomePage extends State<MyHomePage> {
   List<DBDatas> fullData = List<DBDatas>();
   List<DBDatas> finishedData = List<DBDatas>();
   List<DBDatas> unfinishedData = List<DBDatas>();
+
+  DateFormat idFormat = DateFormat('yyyy-MM-dd HH:mm');
+
+  DateTime nowTime;
 
   @override
   void initState() {
@@ -180,10 +185,7 @@ class _MyHomePage extends State<MyHomePage> {
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(
-                        color: Colors.black,
-                        width: 1,
-                        style: BorderStyle.solid)),
+                ),
                 child: TextField(
                   controller: controller,
                   keyboardType: TextInputType.text,
@@ -256,6 +258,7 @@ class _MyHomePage extends State<MyHomePage> {
               title: Text(fullData[index].task,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
+                    color: myTool.timeDifference(nowTime, fullData[index].date, fullData[index].time) ? Colors.red : Colors.black,
                     fontWeight: FontWeight.bold,
                   )),
               subtitle: Text(fullData[index].date +
@@ -277,7 +280,7 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   Widget _buildList2(List<DBDatas> unfinishedData) {
-    if (unfinishedData.length == 0 || fullData == null)
+    if (unfinishedData.length == 0 || unfinishedData == null)
       return Container();
     else
       return ListView.builder(
@@ -300,7 +303,7 @@ class _MyHomePage extends State<MyHomePage> {
                       MyAppLocalizations.of(context).no,
                       () async {
                         int _result =
-                            await helper.deleteTask(fullData[index].id);
+                            await helper.deleteTask(unfinishedData[index].id);
                         //成功
                         if (_result != 0)
                           Tool.showSackerMessageBar(
@@ -319,6 +322,7 @@ class _MyHomePage extends State<MyHomePage> {
               title: Text(unfinishedData[index].task,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
+                    color: myTool.timeDifference(nowTime, unfinishedData[index].date, unfinishedData[index].time) ? Colors.red : Colors.black,
                     fontWeight: FontWeight.bold,
                   )),
               subtitle: Text(unfinishedData[index].date +
@@ -340,7 +344,7 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   Widget _buildList3(List<DBDatas> finishedData) {
-    if (finishedData.length == 0 || fullData == null)
+    if (finishedData.length == 0 || finishedData == null)
       return Container();
     else
       return ListView.builder(
@@ -363,7 +367,7 @@ class _MyHomePage extends State<MyHomePage> {
                       MyAppLocalizations.of(context).no,
                       () async {
                         int _result =
-                            await helper.deleteTask(fullData[index].id);
+                            await helper.deleteTask(finishedData[index].id);
                         //成功
                         if (_result != 0)
                           Tool.showSackerMessageBar(
@@ -382,6 +386,7 @@ class _MyHomePage extends State<MyHomePage> {
               title: Text(finishedData[index].task,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
+                    color: myTool.timeDifference(nowTime, finishedData[index].date, finishedData[index].time) ? Colors.red : Colors.black,
                     fontWeight: FontWeight.bold,
                   )),
               subtitle: Text(finishedData[index].date +
