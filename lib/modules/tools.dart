@@ -84,13 +84,14 @@ class Tool {
         });
   }
 
-  static void showCheckMessage(BuildContext context, String warning, String message, String yes, String no, Function func) {
+  static void showCheckMessage(BuildContext context, String warning,
+      String message, String yes, String no, Function func) {
     showDialog(
-      context: context,
-      barrierDismissible: false, //獨占性，只允許使用者按下對話框中的按鈕才能繼續操作
-      builder: (context) {
-        return AlertDialog(
-          title: Container(
+        context: context,
+        barrierDismissible: false, //獨占性，只允許使用者按下對話框中的按鈕才能繼續操作
+        builder: (context) {
+          return AlertDialog(
+            title: Container(
               child: Column(
                 children: <Widget>[
                   Row(
@@ -105,13 +106,12 @@ class Tool {
               ),
             ),
             content: Text(message,
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   //如果帶入的程式不為空才執行
-                  if(func != null) func();
+                  if (func != null) func();
                   //Navigator.of(context).pop()這個寫法有遇到短暫黑屏過，所以還是用下面這個好
                   Navigator.pop(context);
                 },
@@ -125,8 +125,59 @@ class Tool {
                 child: Text(no, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
-        );
-      });
+          );
+        });
+  }
+
+  static void showSearchModeMessage(BuildContext context, String notice, String key, String message, String message1, String message2, String no) {
+    //1.根據標題搜尋、2.根據日期搜尋、(3.根據重要性搜尋)
+    showDialog(
+        context: context,
+        barrierDismissible: false, //獨占性，只允許使用者按下對話框中的按鈕才能繼續操作
+        builder: (context) {
+          return AlertDialog(
+            title: Container(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(notice,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(width: 10),
+                      Icon(Icons.error_outline)
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            content: Text(message,
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: (){
+                  key = '1';
+                  Navigator.pop(context);
+                }, 
+                child: Text(message1),
+              ),
+              FlatButton(
+                onPressed: (){
+                  key = '2';
+                  Navigator.pop(context);
+                }, 
+                child: Text(message2),
+              ),
+              FlatButton(
+                onPressed: () {
+                  //返回首頁
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainPage()));
+                },
+                child: Text(no, style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ],
+          );
+        });
   }
 
   static void showSackerMessageBar(dynamic key, String message, String status) {
@@ -150,7 +201,7 @@ class Tool {
 
   bool timeDifference(DateTime nowTime, String date, String time) {
     nowTime = DateTime.now();
-    if(nowTime.isAfter(DateTime.parse(date + ' ' + time)) == true)
+    if (nowTime.isAfter(DateTime.parse(date + ' ' + time)) == true)
       return true;
     else
       return false;

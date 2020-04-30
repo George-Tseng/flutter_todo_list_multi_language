@@ -61,6 +61,8 @@ class _MyHomePage extends State<MyHomePage> {
 
   final key = GlobalKey<ScaffoldState>();
 
+  String mode;
+
   DBHelper helper = DBHelper();
 
   Tool myTool = Tool();
@@ -178,7 +180,21 @@ class _MyHomePage extends State<MyHomePage> {
       color: Colors.blue,
       child: Row(
         children: <Widget>[
-          SizedBox(width: 10),
+          IconButton(
+            icon: Icon(Icons.settings),
+            color: Colors.white,
+            iconSize: 20.0,
+            onPressed: () {
+              Tool.showSearchModeMessage(
+                context, 
+                MyAppLocalizations.of(context).notice, 
+                mode,
+                '',
+                MyAppLocalizations.of(context).byTopic,
+                MyAppLocalizations.of(context).byDate,
+                MyAppLocalizations.of(context).no);
+            },
+          ),
           Expanded(
             child: SizedBox(
               height: 30,

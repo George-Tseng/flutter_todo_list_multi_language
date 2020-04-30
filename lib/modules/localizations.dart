@@ -39,6 +39,9 @@ class MyAppLocalizations {
       'warning': 'Warning!',
       'deleteMessage': ' will be deleted, Continue?',
       'no': 'Undo',
+      'notice': 'Please select search options: ',
+      'byTopic': 'By task',
+      'byDate': 'By date',
     },
     'zh' + 'TW': {
       'title': '備忘錄',
@@ -66,6 +69,9 @@ class MyAppLocalizations {
       'warning': '注意!',
       'deleteMessage': ' 將被刪除，要繼續嗎?',
       'no': '取消',
+      'notice': '請選取搜尋選項: ',
+      'byTopic': '依代辦事項',
+      'byDate': '依日期',
     },
     'zh' + 'CN': {
       'title': '备忘录',
@@ -93,6 +99,9 @@ class MyAppLocalizations {
       'warning': '注意!',
       'deleteMessage': ' 将被删除，要继续吗?',
       'no': '取消',
+      'notice': '请选取搜寻选项: ',
+      'byTopic': '依代办事项',
+      'byDate': '依日期',
     },
     'zh' + 'Hant': {
       'title': '備忘錄',
@@ -120,6 +129,9 @@ class MyAppLocalizations {
       'warning': '注意!',
       'deleteMessage': ' 將被刪除，要繼續嗎?',
       'no': '取消',
+      'notice': '請選取搜尋選項: ',
+      'byTopic': '依代辦事項',
+      'byDate': '依日期',
     },
     'zh' + 'Hans': {
       'title': '备忘录',
@@ -147,6 +159,9 @@ class MyAppLocalizations {
       'warning': '注意!',
       'deleteMessage': ' 将被删除，要继续吗?',
       'no': '取消',
+      'notice': '请选取搜寻选项: ',
+      'byTopic': '依代办事项',
+      'byDate': '依日期',
     },
   };
 
@@ -366,6 +381,32 @@ class MyAppLocalizations {
     else
       return _localizedValues[locale.languageCode + locale.scriptCode]
           ['deleteMessage'];
+  }
+
+  String get notice {
+    if (locale.countryCode != null)
+      return _localizedValues[locale.languageCode + locale.countryCode]
+          ['notice'];
+    else
+      return _localizedValues[locale.languageCode + locale.scriptCode]
+          ['notice'];
+  }
+
+  String get byTopic {
+    if (locale.countryCode != null)
+      return _localizedValues[locale.languageCode + locale.countryCode]
+          ['byTopic'];
+    else
+      return _localizedValues[locale.languageCode + locale.scriptCode]
+          ['byTopic'];
+  }
+  String get byDate {
+    if (locale.countryCode != null)
+      return _localizedValues[locale.languageCode + locale.countryCode]
+          ['byDate'];
+    else
+      return _localizedValues[locale.languageCode + locale.scriptCode]
+          ['byDate'];
   }
 }
 
