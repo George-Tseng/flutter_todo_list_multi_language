@@ -258,7 +258,7 @@ class _MyHomePage extends State<MyHomePage> {
               title: Text(fullData[index].task,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: myTool.timeDifference(nowTime, fullData[index].date, fullData[index].time) ? Colors.red : Colors.black,
+                    color: myTool.timeDifference(nowTime, fullData[index].date, fullData[index].time) && fullData[index].status == '' ? Colors.red : fullData[index].status == 'finished' ? Colors.blue : Colors.black,
                     fontWeight: FontWeight.bold,
                   )),
               subtitle: Text(fullData[index].date +
@@ -322,7 +322,7 @@ class _MyHomePage extends State<MyHomePage> {
               title: Text(unfinishedData[index].task,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: myTool.timeDifference(nowTime, unfinishedData[index].date, unfinishedData[index].time) ? Colors.red : Colors.black,
+                    color: myTool.timeDifference(nowTime, unfinishedData[index].date, unfinishedData[index].time) && unfinishedData[index].status == '' ? Colors.red : unfinishedData[index].status == 'finished' ? Colors.blue :Colors.black,
                     fontWeight: FontWeight.bold,
                   )),
               subtitle: Text(unfinishedData[index].date +
@@ -386,7 +386,7 @@ class _MyHomePage extends State<MyHomePage> {
               title: Text(finishedData[index].task,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: myTool.timeDifference(nowTime, finishedData[index].date, finishedData[index].time) ? Colors.red : Colors.black,
+                    color: myTool.timeDifference(nowTime, finishedData[index].date, finishedData[index].time) && finishedData[index].status == '' ? Colors.red : finishedData[index].status == 'finished' ? Colors.blue : Colors.black,
                     fontWeight: FontWeight.bold,
                   )),
               subtitle: Text(finishedData[index].date +
