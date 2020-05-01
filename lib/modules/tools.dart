@@ -129,7 +129,7 @@ class Tool {
         });
   }
 
-  static void showSearchModeMessage(BuildContext context, String notice, String key, String message, String message1, String message2, String no) {
+  showSearchModeMessage(BuildContext context, String notice, String key, String message, String message1, String message2, String message3, String no) {
     //1.根據標題搜尋、2.根據日期搜尋、(3.根據重要性搜尋)
     showDialog(
         context: context,
@@ -150,28 +150,37 @@ class Tool {
                 ],
               ),
             ),
-            content: Text(message,
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            content: Text(message + (key == '1' ? message1 : key == '2' ? message2 : message3),
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
             actions: <Widget>[
               FlatButton(
                 onPressed: (){
                   key = '1';
                   Navigator.pop(context);
+                  return key;
                 }, 
-                child: Text(message1),
+                child: Text(message1, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               FlatButton(
                 onPressed: (){
                   key = '2';
                   Navigator.pop(context);
+                  return key;
                 }, 
-                child: Text(message2),
+                child: Text(message2, style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              FlatButton(
+                onPressed: (){
+                  key = '3';
+                  Navigator.pop(context);
+                  return key;
+                }, 
+                child: Text(message3, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               FlatButton(
                 onPressed: () {
                   //返回首頁
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MainPage()));
+                  Navigator.pop(context);
                 },
                 child: Text(no, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
@@ -192,9 +201,7 @@ class Tool {
           ? Colors.black
           : status == 'Notice' ? Colors.orange : Colors.blue,
       //持續時間
-      duration: status == 'Notice'
-          ? Duration(seconds: 1, milliseconds: 5000)
-          : Duration(seconds: 1, milliseconds: 500),
+      duration: Duration(seconds: 1, milliseconds: 500),
     );
     key.currentState.showSnackBar(snackBar);
   }

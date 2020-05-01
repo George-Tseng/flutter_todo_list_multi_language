@@ -61,7 +61,7 @@ class _MyHomePage extends State<MyHomePage> {
 
   final key = GlobalKey<ScaffoldState>();
 
-  String mode;
+  String mode = '1';
 
   DBHelper helper = DBHelper();
 
@@ -70,6 +70,10 @@ class _MyHomePage extends State<MyHomePage> {
   List<DBDatas> fullData = List<DBDatas>();
   List<DBDatas> finishedData = List<DBDatas>();
   List<DBDatas> unfinishedData = List<DBDatas>();
+
+  List<String> fullList = List<String>();
+  List<String> finishedList = List<String>();
+  List<String> unfinishedList = List<String>();
 
   DateFormat idFormat = DateFormat('yyyy-MM-dd HH:mm');
 
@@ -136,6 +140,7 @@ class _MyHomePage extends State<MyHomePage> {
                     ),
                   ),
                   _buildSearchBar(_controller001),
+                  _buildButtomBar(),
                 ],
               ),
             ),
@@ -151,6 +156,7 @@ class _MyHomePage extends State<MyHomePage> {
                     ),
                   ),
                   _buildSearchBar(_controller002),
+                  _buildButtomBar(),
                 ],
               ),
             ),
@@ -166,6 +172,7 @@ class _MyHomePage extends State<MyHomePage> {
                     ),
                   ),
                   _buildSearchBar(_controller003),
+                  _buildButtomBar(),
                 ],
               ),
             ),
@@ -181,18 +188,24 @@ class _MyHomePage extends State<MyHomePage> {
       child: Row(
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: mode == '1' ? Icon(Icons.list) : mode == '2' ? Icon(Icons.calendar_today) : mode == '3' ? Icon(Icons.star) : Container(),
             color: Colors.white,
             iconSize: 20.0,
             onPressed: () {
-              Tool.showSearchModeMessage(
-                context, 
-                MyAppLocalizations.of(context).notice, 
-                mode,
-                '',
-                MyAppLocalizations.of(context).byTopic,
-                MyAppLocalizations.of(context).byDate,
-                MyAppLocalizations.of(context).no);
+              setState(() {
+                if (mode == '1') {
+                  mode = '2';
+                  Tool.showSackerMessageBar(key, MyAppLocalizations.of(context).nowis + MyAppLocalizations.of(context).byDate, 'Notice');
+                }
+                else if (mode == '2') {
+                  mode = '3';
+                  Tool.showSackerMessageBar(key, MyAppLocalizations.of(context).nowis + MyAppLocalizations.of(context).byImportance, 'Notice');
+                }
+                else if (mode == '3') {
+                  mode = '1';
+                  Tool.showSackerMessageBar(key, MyAppLocalizations.of(context).nowis + MyAppLocalizations.of(context).byTopic, 'Notice');
+                }
+              });
             },
           ),
           Expanded(
@@ -227,6 +240,23 @@ class _MyHomePage extends State<MyHomePage> {
             iconSize: 20.0,
             onPressed: () {},
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButtomBar() {
+    return Container(
+      color: Colors.blue,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: SizedBox(
+              height: 40,
+              child: Container(
+                ),
+              ),
+            ),
         ],
       ),
     );

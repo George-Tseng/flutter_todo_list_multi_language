@@ -42,6 +42,8 @@ class MyAppLocalizations {
       'notice': 'Please select search options: ',
       'byTopic': 'By task',
       'byDate': 'By date',
+      'byImportance': 'By importance',
+      'nowis': 'Now the mode is: ',
     },
     'zh' + 'TW': {
       'title': '備忘錄',
@@ -72,6 +74,8 @@ class MyAppLocalizations {
       'notice': '請選取搜尋選項: ',
       'byTopic': '依代辦事項',
       'byDate': '依日期',
+      'byImportance': '依重要度',
+      'nowis': '當前模式為: ',
     },
     'zh' + 'CN': {
       'title': '备忘录',
@@ -102,6 +106,8 @@ class MyAppLocalizations {
       'notice': '请选取搜寻选项: ',
       'byTopic': '依代办事项',
       'byDate': '依日期',
+      'byImportance': '依重要度',
+      'nowis': '当前模式为: ',
     },
     'zh' + 'Hant': {
       'title': '備忘錄',
@@ -132,6 +138,8 @@ class MyAppLocalizations {
       'notice': '請選取搜尋選項: ',
       'byTopic': '依代辦事項',
       'byDate': '依日期',
+      'byImportance': '依重要度',
+      'nowis': '當前模式為: ',
     },
     'zh' + 'Hans': {
       'title': '备忘录',
@@ -162,6 +170,8 @@ class MyAppLocalizations {
       'notice': '请选取搜寻选项: ',
       'byTopic': '依代办事项',
       'byDate': '依日期',
+      'byImportance': '依重要度',
+      'nowis': '当前模式为: ',
     },
   };
 
@@ -407,6 +417,24 @@ class MyAppLocalizations {
     else
       return _localizedValues[locale.languageCode + locale.scriptCode]
           ['byDate'];
+  }
+
+  String get byImportance {
+    if (locale.countryCode != null)
+      return _localizedValues[locale.languageCode + locale.countryCode]
+          ['byImportance'];
+    else
+      return _localizedValues[locale.languageCode + locale.scriptCode]
+          ['byImportance'];
+  }
+
+  String get nowis {
+    if (locale.countryCode != null)
+      return _localizedValues[locale.languageCode + locale.countryCode]
+          ['nowis'];
+    else
+      return _localizedValues[locale.languageCode + locale.scriptCode]
+          ['nowis'];
   }
 }
 
