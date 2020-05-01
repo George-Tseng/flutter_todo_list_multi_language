@@ -9,11 +9,13 @@ class DBHelper {
   static DBHelper _dbHelper;
   static Database _db;
 
-  String taskTable = "task_table"; //table名稱
+  String todoTable = "todotable"; //table名稱
   String columnId = "id"; //欄位-id
+  String columnImportance = "importance"; //欄位-importance
   String columnTask = "task"; //欄位-task
   String columnDate = "date"; //欄位-date
   String columnTime = "time"; //欄位-time
+  String columnCatgory = "catgory"; //欄位-catgory
   String columnStatus = "status"; //欄位-status
 
   DBHelper._createInstance();
@@ -51,14 +53,14 @@ class DBHelper {
   void _createDb(Database db, int newVersion) async {
     await db.execute(
         //建立table的指令
-        'CREATE TABLE $taskTable ($columnId INTEGER PRIMARY KEY AUTOINCREMENT, $columnTask TEXT, $columnDate TEXT, $columnTime TEXT, $columnStatus TEXT)');
+        'CREATE TABLE $todoTable ($columnId INTEGER PRIMARY KEY, $columnImportance INTEGER, $columnTask TEXT, $columnDate TEXT, $columnTime TEXT, $columnCatgory TEXT, $columnStatus TEXT)');
   }
 
   //取得所有列表(map)
   Future<List<Map<String, dynamic>>> getTaskMapList() async {
     Database db = await this.database;
     dynamic _result = db.rawQuery(
-        'SELECT * FROM $taskTable order by $columnDate, $columnTime ASC');
+        'SELECT * FROM $todoTable order by $columnDate, $columnTime ASC');
     return _result;
   }
 
@@ -66,7 +68,7 @@ class DBHelper {
   Future<List<Map<String, dynamic>>> getUnfinishedTaskMapList() async {
     Database db = await this.database;
     dynamic _result = db.rawQuery(
-        'SELECT * FROM $taskTable where $columnStatus = "" order by $columnDate, $columnTime ASC');
+        'SELECT * FROM $todoTable where $columnStatus = "" order by $columnDate, $columnTime ASC');
     return _result;
   }
 
@@ -74,21 +76,21 @@ class DBHelper {
   Future<List<Map<String, dynamic>>> getFinishedTaskMapList() async {
     Database db = await this.database;
     dynamic _result = db.rawQuery(
-        'SELECT * FROM $taskTable where $columnStatus = "finished" order by $columnDate, $columnTime ASC');
+        'SELECT * FROM $todoTable where $columnStatus = "finished" order by $columnDate, $columnTime ASC');
     return _result;
   }
 
   //更新列表
   Future<int> insertTask(DBDatas task) async {
     Database db = await this.database;
-    dynamic _result = await db.insert(taskTable, task.toMap());
+    dynamic _result = await db.insert(todoTable, task.toMap());
     return _result;
   }
 
   //修改列表
   Future<int> updateTask(DBDatas task) async {
     Database db = await this.database;
-    dynamic _result = await db.update(taskTable, task.toMap(),
+    dynamic _result = await db.update(todoTable, task.toMap(),
         where: '$columnId = ?', whereArgs: [task.id]);
     return _result;
   }
@@ -97,7 +99,7 @@ class DBHelper {
   Future<int> deleteTask(int id) async {
     Database db = await this.database;
     int _result =
-        await db.rawDelete('DELETE FROM $taskTable WHERE $columnId=$id');
+        await db.rawDelete('DELETE FROM $todoTable WHERE $columnId=$id');
     return _result;
   }
 
@@ -105,7 +107,7 @@ class DBHelper {
   Future<int> getCount() async {
     Database db = await this.database;
     List<Map<String, dynamic>> _count =
-        await db.rawQuery('SELECT COUNT (*) FROM $taskTable');
+        await db.rawQuery('SELECT COUNT (*) FROM $todoTable');
     int _result = Sqflite.firstIntValue(_count);
     return _result;
   }
